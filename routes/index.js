@@ -3,6 +3,8 @@ const postRouter = require("./PostRouters");
 const notificationRouter = require("./NotificationRouters");
 const friendRouter = require("./FriendRoutes");
 const followingRouter = require("./FollowingRouters");
+const authRouters = require('./authRoutes');
+const {signupRouter} = require('./Signup')
 
 //api
 const apiRouter = require("express").Router();
@@ -13,6 +15,8 @@ apiRouter.use("/notifications", notificationRouter);
 apiRouter.use("/friends", friendRouter);
 apiRouter.use("/followings", followingRouter);
 
+module.exports = {apiRouter, authRouters, signupRouter};
+
+// const authRouter = require("express").Router();
 
 
-module.exports = apiRouter;
