@@ -32,7 +32,7 @@ authFacebookRoute.route('/callback').get(passport.authenticate('facebook', { fai
     function (req, res) {
         // Successful authentication, redirect home.
         // console.log(req.session)
-        res.redirect('/logined');
+        res.redirect('http://localhost:3000');
     })
 
 module.exports = authFacebookRoute

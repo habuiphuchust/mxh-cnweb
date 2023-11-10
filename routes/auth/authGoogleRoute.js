@@ -31,7 +31,7 @@ authGoogleRoute.route('/callback').get(passport.authenticate('google', { failure
     function (req, res) {
         // Successful authentication, redirect home.
         console.log(req.session)
-        res.redirect('/logined');
+        res.redirect('http://localhost:3000');
     }
 )
 

@@ -18,7 +18,12 @@ exports.isValidEmail = validateEmail
 exports.isValidPassword = validatePassword
 
 router.route("/").post(async function (req, res) {
-    let {user_email, user_password, user_fullname, user_gender, user_name} = req.body;
+    let {user_email, user_password, user_fullname, user_gender, user_birthday} = req.body;
+    let birthday = new Date(user_birthday);
+
+    if (birthday.toUTCString() === 'Invalid Date') {
+        birthday = new Date()
+    }
     if(!validateEmail(user_email)) {
         return res.json({message: "email không hợp lệ", status: "fail"})
     }
@@ -34,9 +39,12 @@ router.route("/").post(async function (req, res) {
     const salt = crypto.randomBytes(16);
     crypto.pbkdf2(user_password, salt, 310000, 32, 'sha256', function (err, hashedPassword) {
         if (err) { return res.json({err, status: "fail"}); }
-        const user = {user_email, user_password: hashedPassword, user_fullname, user_gender, user_name, salt}
-        createUser(user).then(kq => res.json({data: kq, status: "success"})).
-        catch(err => {
+        const user = {user_email, user_password: hashedPassword, user_fullname, user_gender, user_birthday: birthday, salt}
+        createUser(user).then(kq => {
+            req.session.passport = {user: {user_id: kq._id, user_fullname: kq.user_fullname}}
+            res.json({data: kq, status: "success"})
+        })
+        .catch(err => {
             res.json({message: err, status: "fail"})
         })
         

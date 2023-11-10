@@ -3,6 +3,7 @@ const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
 const Router = require("./routes/index.js");
+const cors = require("cors");
 
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -24,8 +25,8 @@ mongoose
   });
 
 const app = express();
+app.use(cors({ methods: "GET,HEAD,PUT,PATCH,POST,DELETE", credentials: true }));
 app.use(express.json());
-
 //session
 app.use(
   session({
@@ -36,7 +37,7 @@ app.use(
 );
 
 // router
-app.use("/",Router);
+app.use("/", Router);
 
 // link mac dinh
 app.use(express.static("public"));
