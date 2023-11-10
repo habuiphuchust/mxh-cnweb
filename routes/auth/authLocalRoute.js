@@ -30,6 +30,9 @@ const verify = (req, res) => {
           if (!crypto.timingSafeEqual(kq.user_password, hashedPassword)) {
             return res.json(failLogin);
           }
+          if (kq.facebook_id || kq.google_id) return res.json(failLogin);
+          req.session.passport = {user: {user_id: kq._id, user_fullname: kq.user_fullname}}
+          console.log(req.session)
           return res.json({message: kq, status: "success"});
         }
       );

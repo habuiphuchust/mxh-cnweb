@@ -2,7 +2,7 @@ const https = require("https");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
-const {apiRouter, authRouters, signupRouter} = require("./routes/index.js");
+const Router = require("./routes/index.js");
 
 const mongoose = require("mongoose");
 require("dotenv").config();
@@ -36,14 +36,7 @@ app.use(
 );
 
 // router
-app.use("/api", apiRouter);
-app.use("/auth", authRouters);
-app.use("/signup", signupRouter);
-
-app.get("/logined", (req, res) => {
-  console.log(req.session);
-  res.send("đã login nhé");
-});
+app.use("/",Router);
 
 // link mac dinh
 app.use(express.static("public"));

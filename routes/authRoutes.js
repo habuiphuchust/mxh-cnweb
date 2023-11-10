@@ -10,14 +10,12 @@ authRouters.use("/google", authGoogleRoute);
 authRouters.use("/password", authLocalRoute)
 
 passport.serializeUser(function (user, cb) {
-  console.log(user);
   process.nextTick(function () {
     cb(null, user);
   });
 });
 
 passport.deserializeUser(function (user, cb) {
-  console.log(user);
   process.nextTick(function () {
     return cb(null, user);
   });
