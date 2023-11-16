@@ -16,7 +16,9 @@ passport.use(new GoogleStrategy({
         const user = {
             user_fullname: profile.displayName,
             google_id: profile.id,
-            user_email: profile.id + '@google'
+            user_email: profile.id + '@google',
+            user_picture: "/default_avatar.png",
+            user_cover: "/default_cover.png"
         }
         getUserByGoogleId(profile.id).then(kq => {
             if (kq != null) return cb(null, {user_id: kq._id, user_fullname: kq.user_fullname})
@@ -30,7 +32,7 @@ authGoogleRoute.route('/').get(passport.authenticate('google', { scope: ['profil
 authGoogleRoute.route('/callback').get(passport.authenticate('google', { failureRedirect: '/login' }),
     function (req, res) {
         // Successful authentication, redirect home.
-        console.log(req.session)
+        // console.log(req.session)
         res.redirect('http://localhost:3000');
     }
 )

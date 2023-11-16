@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Upload</title>
+</head>
+<body>
+  <h1>Image Upload</h1>
+  <form action="https://localhost:8080/api/images" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*">
+    <button type="submit">Upload</button>
+  </form>
+
+  <h2>Images</h2>
+  <div id="imageContainer"></div>
+  <img src="https://localhost:8080/api/images/65538fdfa723379599345363" alt="noimage">
+</body>
+</html>

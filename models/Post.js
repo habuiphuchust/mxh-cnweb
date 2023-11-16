@@ -12,8 +12,14 @@ const postSchema = new Schema({
     privacy: String, // friends, public or private
     text: String,
     photos: [String],  // mảng các link ảnh
-    likes: Number,
-    comments: Number,
+    likes: {
+        type: Number,
+        default: 0
+    },
+    comments: {
+        type: Number,
+        default: 0
+    },
     shares: String // được chia sẻ từ bài nào hay ko
 });
 module.exports = mongoose.model("post", postSchema);

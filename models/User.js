@@ -15,7 +15,7 @@ const userSchema = new Schema({
     user_picture: String,
     user_cover: String,
     user_work_title: String,
-    user_work_placeplace: String,
+    user_work_place: String,
     user_current_city: String,
     user_hometown: String,
     user_birthday: {

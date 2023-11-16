@@ -4,6 +4,10 @@ exports.getAllPosts = async () => {
   return await PostModel.find();
 };
 
+exports.getPostByUserId = async (user_id) => {
+  return await PostModel.find({user_id})
+}
+
 exports.createPost = async (Post) => {
   const newPost = new PostModel(Post);
   return await newPost.save();

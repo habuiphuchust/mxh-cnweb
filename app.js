@@ -18,13 +18,17 @@ const credentials = {
 mongoose
   .connect(
     process.env.MONGODB_URI ||
-      "mongodb+srv://it4409:it4409-soict@lamdb-crud.qd3s7vv.mongodb.net/?retryWrites=true&w=majority"
+      "mongodb://localhost:27017/mangxahoi"
   )
   .catch((err) => {
     console.log(err);
   });
-
+  
 const app = express();
+
+  // link mac dinh
+app.use(express.static("public"));
+
 app.use(cors({ methods: "GET,HEAD,PUT,PATCH,POST,DELETE", credentials: true }));
 app.use(express.json());
 //session
@@ -39,11 +43,7 @@ app.use(
 // router
 app.use("/", Router);
 
-// link mac dinh
-app.use(express.static("public"));
-//configure mongoose
 
-//middleware
 
 // app.listen(process.env.PORT || 8080, () => {
 //   console.log(`Server is running on port ${process.env.PORT || 8080}`);

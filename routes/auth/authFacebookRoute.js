@@ -15,7 +15,9 @@ passport.use(new FacebookStrategy({
         const user = {
             user_fullname: profile.displayName,
             facebook_id: profile.id,
-            user_email: profile.id + '@facebook'
+            user_email: profile.id + '@facebook',
+            user_picture: "/default_avatar.png",
+            user_cover: "/default_cover.png"
         }
         getUserByFacebookId(profile.id).then(kq => {
             if (kq != null) return cb(null, {user_id: kq._id, user_fullname: kq.user_fullname})

@@ -25,7 +25,7 @@ const verify = (req, res) => {
         "sha256",
         function (err, hashedPassword) {
           if (err) {
-            return res.json({message: err, status: 'fail'});
+            return res.json({message: err.message, status: 'fail'});
           }
           if (!crypto.timingSafeEqual(kq.user_password, hashedPassword)) {
             return res.json(failLogin);
@@ -36,7 +36,7 @@ const verify = (req, res) => {
         }
       );
     })
-    .catch((err) => res.json({message: err, status: "fail"}));
+    .catch((err) => res.json({message: err.message, status: "fail"}));
 };
 
 router.route("/").post(verify);

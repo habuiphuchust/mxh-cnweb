@@ -6,8 +6,7 @@ const friendRouter = require("./FriendRoutes");
 const followingRouter = require("./FollowingRouters");
 const authRouters = require('./authRoutes');
 const {signupRouter} = require('./Signup');
-const passport = require("passport");
-
+const ImageRoutes = require('./ImageRoutes')
 //
 const Router = express.Router()
 const apiRouter = express.Router()
@@ -17,6 +16,7 @@ apiRouter.use("/posts", postRouter);
 apiRouter.use("/notifications", notificationRouter);
 apiRouter.use("/friends", friendRouter);
 apiRouter.use("/followings", followingRouter);
+apiRouter.use('/images', ImageRoutes);
 
 Router.use('/api', apiRouter)
 Router.use('/signup', signupRouter)
