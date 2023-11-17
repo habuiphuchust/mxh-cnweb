@@ -53,7 +53,7 @@ exports.updatePost = async (req, res) => {
   }
   const post = await postService.getPostById(req.params.id);
   if (req.session.passport.user.user_id != post?.user_id) {
-    res.json({message:"bạn không có quyền sửa", status:"success"})
+    res.json({message:"bạn không có quyền sửa", status:"fail"})
     return;
   }
   try {
