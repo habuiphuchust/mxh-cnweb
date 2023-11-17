@@ -110,10 +110,6 @@ exports.getPostByText = async (req, res) => {
 }
 
 exports.getPostByUserId = async (req, res) => {
-  if (!req.session?.passport?.user) {
-    res.json({message: "chưa đăng nhập", status: "fail"})
-    return;
-  }
   try {
     const posters = await (await postService.getPostByUserId(req.params.id))
     res.json({ data: posters, status: "success" });

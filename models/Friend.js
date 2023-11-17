@@ -6,7 +6,7 @@ const friendSchema = new Schema({
     user_two_id: String,
     date: {
         type: Date,
-        default: new Date("0000-00-00")
+        default: Date.now
     }
 });
 

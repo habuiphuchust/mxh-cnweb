@@ -21,12 +21,9 @@ exports.createUser = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  if (!req.session?.passport?.user) {
-    res.json({message: "chưa đăng nhập", status: "fail"})
-    return;
-  }
   try {
     const {
+      _id,
       user_name,
       user_fullname,
       user_gender,
@@ -43,6 +40,7 @@ exports.getUserById = async (req, res) => {
     } = await UserService.getUserById(req.params.id);
     res.json({
       data: {
+        _id,
         user_name,
         user_fullname,
         user_gender,

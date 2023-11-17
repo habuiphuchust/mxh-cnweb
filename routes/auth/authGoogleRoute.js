@@ -16,9 +16,7 @@ passport.use(new GoogleStrategy({
         const user = {
             user_fullname: profile.displayName,
             google_id: profile.id,
-            user_email: profile.id + '@google',
-            user_picture: "/default_avatar.png",
-            user_cover: "/default_cover.png"
+            user_email: profile.id + '@google'
         }
         getUserByGoogleId(profile.id).then(kq => {
             if (kq != null) return cb(null, {user_id: kq._id, user_fullname: kq.user_fullname})

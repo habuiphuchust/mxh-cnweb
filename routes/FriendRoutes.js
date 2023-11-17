@@ -1,7 +1,7 @@
 const express = require("express");
 const {
     getAllFriends,
-    getFriendById,
+    checkFriend,
     getFriendByUser,
     createFriend,
     deleteFriend
@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.route("/").get(getAllFriends).post(createFriend);
 router.route("/user/:id").get(getFriendByUser);
-router.route("/:id").get(getFriendById).delete(deleteFriend);
+router.route("/delete").post(deleteFriend);
+router.route('/check').post(checkFriend)
 
 module.exports = router;

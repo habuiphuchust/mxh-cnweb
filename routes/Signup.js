@@ -57,9 +57,7 @@ router.route("/").post(async function (req, res) {
         user_fullname,
         user_gender,
         user_birthday: birthday,
-        salt,
-        user_picture: "/default_avatar.png",
-        user_cover: "/default_cover.png"
+        salt
       };
       createUser(user)
         .then((kq) => {
