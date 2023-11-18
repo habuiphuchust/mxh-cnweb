@@ -2,7 +2,7 @@ const express = require("express");
 const {
     getAllFriends,
     checkFriend,
-    getFriendByUser,
+    getFriends,
     createFriend,
     deleteFriend
 } = require("../controllers/FriendController");
@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 
 router.route("/").get(getAllFriends).post(createFriend);
-router.route("/user/:id").get(getFriendByUser);
+router.route("/getfriends").get(getFriends);
 router.route("/delete").post(deleteFriend);
 router.route('/check').post(checkFriend)
 

@@ -158,10 +158,23 @@ exports.getMyInfo = async (req, res) => {
     return;
   }
   try {
-    User = await UserService.getUserById(req.session.passport.user.user_id);
+    let User = await UserService.getUserById(req.session.passport.user.user_id);
     res.json({data: User, status: "success"})
   } catch (error) {
     res.status(500).json({ message: err.message, status: "fail" });
   }
 
+}
+exports.searchUsers = async (req, res) => {
+  try {
+    let search = req.query.search
+    if (search && search?.length > 1) {
+      const users = await UserService.searchUsers(search)
+      res.json({data: users, status: 'success'})
+      return;
+    }
+    res.json({message: "ít nhất 2 kí tự", status: 'fail'})
+  } catch (error) {
+    res.status(500).json({ message: err.message, status: "fail" });
+  }
 }

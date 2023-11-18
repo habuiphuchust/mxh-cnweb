@@ -6,6 +6,7 @@ const notificationSchema = new Schema({
     from_user_id: String,
     action: String, // loại thông báo: kết bạn, có người follow, ...
     url: String, // link dẫn đến nguồn thông báo
+    message: String,
     time: {
         type: Date,
         default: Date.now

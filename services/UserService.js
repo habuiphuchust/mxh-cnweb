@@ -31,3 +31,15 @@ exports.updateUser = async (id, User) => {
 exports.deleteUser = async (id) => {
   return await UserModel.findByIdAndDelete(id);
 };
+exports.searchUsers = async (keyword) => {
+  let search = new RegExp(keyword, "i");
+  return await UserModel.find({$or: [{user_email: search}, {user_fullname: search}]}, {_id: 1, user_fullname: 1, user_activated: 1, user_picture: 1})
+}
+exports.getFriends = async (array) => {
+  const friends = [];
+  for (let user_id of array) {
+    let user = await UserModel.findById(user_id, {_id: 1, user_fullname: 1, user_activated: 1, user_picture: 1})
+    friends.push(user)
+  }
+  return friends;
+}
