@@ -43,3 +43,11 @@ exports.getFriends = async (array) => {
   }
   return friends;
 }
+
+exports.setActived = async (user_id) => {
+  return await UserModel.findByIdAndUpdate(user_id, {user_activated: 'on'})
+}
+
+exports.unActived = async (user_id) => {
+  return await UserModel.findByIdAndUpdate(user_id, {user_activated: 'off'})
+}

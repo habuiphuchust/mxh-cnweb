@@ -1,13 +1,4 @@
-const NotificationService = require("../services/Notificationservice");
-
-exports.getAllNotifications = async (req, res) => {
-  try {
-    const Notifications = await NotificationService.getAllNotifications();
-    res.json({ data: Notifications, status: "success" });
-  } catch (err) {
-    res.status(500).json({ error: err.message, status: "fail" });
-  }
-};
+const NotificationService = require("../services/NotificationService")
 
 exports.createNotification = async (req, res) => {
   try {
@@ -28,36 +19,40 @@ exports.getNotificationById = async (req, res) => {
   }
 };
 
-exports.updateNotification = async (req, res) => {
+exports.deleteNotificationById = async (req, res) => {
   try {
-    const Notification = await NotificationService.updateNotification(req.params.id, req.body);
+    if (!req.session?.passport?.user) {
+      res.json({message: "chưa đăng nhập", status: "fail"})
+      return;
+    }
+    const Notification = await NotificationService.deleteNotificationById(req.params.id);
     res.json({ data: Notification, status: "success" });
   } catch (err) {
-    res.status(500).json({ error: err.message, status: "fail" });
+    res.status(500).json({ message: err.message, status: "fail" });
   }
 };
 
-exports.deleteNotification = async (req, res) => {
+exports.deleteNotifications = async (req, res) => {
   try {
-    const Notification = await NotificationService.deleteNotification(req.params.id);
-    res.json({ data: Notification, status: "success" });
-  } catch (err) {
-    res.status(500).json({ error: err.message, status: "fail" });
-  }
-};
-exports.deleteReadedNotificationByUserId = async (req, res) => {
-  try {
-    const Notification = await NotificationService.deleteReadedNotificationByUserId(req.params.id);
-    res.json({ data: Notification, status: "success" });
-  } catch (err) {
-    res.status(500).json({ error: err.message, status: "fail" });
-  } 
-};
-exports.getUnreadNotificationByUserId = async (req, res) => {
-  try {
-    const Notifications = await NotificationService.getUnreadNotificationByUserId(req.params.id);
+    if (!req.session?.passport?.user) {
+      res.json({message: "chưa đăng nhập", status: "fail"})
+      return;
+    }
+    const Notifications = await NotificationService.deleteNotificationByUserId(req.session.passport.user.user_id);
     res.json({ data: Notifications, status: "success" });
   } catch (err) {
-    res.status(500).json({ error: err.message, status: "fail" });
+    res.status(500).json({ message: err.message, status: "fail" });
+  } 
+};
+exports.getNotifications = async (req, res) => {
+  try {
+    if (!req.session?.passport?.user) {
+      res.json({message: "chưa đăng nhập", status: "fail"})
+      return;
+    }
+    const Notifications = await NotificationService.getNotificationByUserId(req.session.passport.user.user_id);
+    res.json({ data: Notifications, status: "success" });
+  } catch (err) {
+    res.status(500).json({ message: err.message, status: "fail" });
   }
 }

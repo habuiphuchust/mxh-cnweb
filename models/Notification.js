@@ -10,8 +10,7 @@ const notificationSchema = new Schema({
     time: {
         type: Date,
         default: Date.now
-    },
-    seen: String  // đã xem hoặc chưa xem
+    }
 })
 
 module.exports = mongoose.model("notification", notificationSchema);

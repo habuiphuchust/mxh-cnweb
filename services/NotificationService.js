@@ -16,16 +16,13 @@ exports.getNotificationByUserId = async (id) => {
   return await NotificationModel.find({to_user_id: id});
 };
 
-exports.getUnreadNotificationByUserId = async (id) => {
-    return await NotificationModel.find({to_user_id: id, seen: "false"});
-  };
-exports.updateNotification = async (id, Notification) => {
-  return await NotificationModel.findByIdAndUpdate(id, Notification);
-};
+exports.deleteNotificationById = async (id, Notification) => {
+  return await NotificationModel.findByIdAndDelete(id);
+}
 
 exports.deleteNotification = async (notify) => {
   return await NotificationModel.findOneAndDelete(notify);
 };
-exports.deleteReadedNotificationByUserId = async (id) => {
-  return await NotificationModel.deleteMany({to_user_id: id, seen: "true"});
+exports.deleteNotificationByUserId = async (id) => {
+  return await NotificationModel.deleteMany({to_user_id: id});
 }
