@@ -74,10 +74,11 @@ io.on('connection', (socket) => {
     socket.to(data.user_two_id).emit('notify', data.message)
   })
   socket.on('disconnect', () => {
-    if (user_id) {
-      UserService.unActived(user_id)
-      socket.leave(user_id)
-    }
+    setTimeout(() => {
+      if (user_id) {
+        UserService.unActived(user_id)
+      }
+    }, 5000);
   })
 })
 

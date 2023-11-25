@@ -16,6 +16,14 @@ const postSchema = new Schema({
         type: Number,
         default: 0
     },
+    unlikes: {
+        type: Number,
+        default: 0
+    },
+    shares: {
+        type: Number,
+        default: 0
+    },
     comments: {
         type: Number,
         default: 0

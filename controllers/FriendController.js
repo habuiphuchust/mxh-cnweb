@@ -1,4 +1,4 @@
-const FriendService = require("../services/Friendservice");
+const FriendService = require("../services/FriendService");
 const NotificationService = require('../services/NotificationService')
 const UserService = require('../services/UserService')
 
