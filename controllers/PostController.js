@@ -2,6 +2,7 @@ const postService = require("../services/PostService");
 const Image = require('../models/Image')
 const FriendService = require('../services/FriendService')
 const UserService = require('../services/UserService')
+const UserModal = require('../models/User')
 
 
 exports.getAllPosts = async (req, res) => {
@@ -79,10 +80,11 @@ exports.createPost = async (req, res) => {
 
 exports.getPostById = async (req, res) => {
   try {
-    const post = await postService.getpostById(req.params.id);
-    res.json({ data: post, status: "success" });
+    const post = await postService.getPostById(req.params.id);
+    const user = await UserModal.findById(post.user_id, {_id: 1, user_fullname: 1, user_picture: 1, user_activated: 1})
+    res.json({ data: {...post._doc, user}, status: "success" });
   } catch (err) {
-    res.status(500).json({ error: err.message, status: "fail" });
+    res.status(500).json({ message: err.message, status: "fail" });
   }
 };
 
