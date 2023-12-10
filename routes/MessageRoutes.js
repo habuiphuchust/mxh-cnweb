@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const messageController = require('../controllers/MessageController');
+// const multer = require('multer');
 
-router.post('/send-message', messageController.sendMessage);
-router.get('/get-friends/:userId', messageController.getFriends);
-router.get('/get-messages/:userId/:friendId', messageController.getMessages);
+// const storage = multer.memoryStorage();
+// const upload = multer({ storage: storage });
+
+router.route('/:id').get(messageController.getMessages).delete(messageController.deleteMessage);
+router.route('/').get(messageController.getMessagers).post(messageController.sendMessage);
 module.exports = router;

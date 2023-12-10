@@ -3,6 +3,7 @@ const express = require("express");
 const { getUserByEmail } = require("../../services/UserService");
 const { isValidEmail } = require("../Signup");
 const router = express.Router();
+const UserService = require('../../services/UserService')
 
 const verify = (req, res) => {
   const { user_email, user_password } = req.body;
@@ -32,6 +33,7 @@ const verify = (req, res) => {
           }
           if (kq.facebook_id || kq.google_id) return res.json(failLogin);
           req.session.passport = {user: {user_id: kq._id, user_fullname: kq.user_fullname}}
+          UserService.setActived(kq._id)
           return res.json({message: kq, status: "success"});
         }
       );

@@ -3,6 +3,7 @@ const Image = require('../models/Image')
 const FriendService = require('../services/FriendService')
 const UserService = require('../services/UserService')
 const UserModal = require('../models/User')
+const LikeModal = require('../models/Like')
 
 
 exports.getAllPosts = async (req, res) => {
@@ -139,6 +140,7 @@ exports.deletePost = async (req, res) => {
     for (const image of photos) {
       await Image.findByIdAndDelete(image);
     }
+    await LikeModal.deleteMany({post_id: req.params.id})
     const result = await postService.deletePost(req.params.id)
 
     res.json({ message: result, status: "success" });

@@ -3,6 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 require("dotenv").config()
 const authGoogleRoute = require("express").Router();
 const {createUser, getUserByGoogleId} = require('../../services/UserService')
+const UserService = require('../../services/UserService')
 
 
 // login with google
@@ -31,7 +32,8 @@ authGoogleRoute.route('/callback').get(passport.authenticate('google', { failure
     function (req, res) {
         // Successful authentication, redirect home.
         // console.log(req.session)
-        res.redirect('http://localhost:3000');
+        UserService.setActived(req.session?.passport?.user?.user_id)
+        res.redirect('/');
     }
 )
 

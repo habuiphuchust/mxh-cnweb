@@ -3,6 +3,7 @@ const FacebookStrategy = require('passport-facebook').Strategy;
 const {createUser, getUserByFacebookId} = require('../../services/UserService')
 const authFacebookRoute = require("express").Router();
 require("dotenv").config()
+const UserService = require('../../services/UserService')
 
 // login with facebook
 passport.use(new FacebookStrategy({
@@ -32,7 +33,8 @@ authFacebookRoute.route('/callback').get(passport.authenticate('facebook', { fai
     function (req, res) {
         // Successful authentication, redirect home.
         // console.log(req.session)
-        res.redirect('http://localhost:3000');
+        UserService.setActived(req.session?.passport?.user?.user_id)
+        res.redirect('https://habuiphuc.id.vn:8080');
     })
 
 module.exports = authFacebookRoute

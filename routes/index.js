@@ -9,6 +9,8 @@ const likeRouters = require('./LikeRouters')
 const {signupRouter} = require('./Signup');
 const ImageRoutes = require('./ImageRoutes')
 const messageRoutes = require('./MessageRoutes')
+const UserService = require("../services/UserService.js");
+
 //
 const Router = express.Router()
 const apiRouter = express.Router()
@@ -20,7 +22,7 @@ apiRouter.use("/friends", friendRouter);
 apiRouter.use("/followings", followingRouter);
 apiRouter.use('/images', ImageRoutes);
 apiRouter.use('/likes', likeRouters);
-apiRouter.use('/message', messageRoutes)
+apiRouter.use('/messages', messageRoutes)
 
 Router.use('/api', apiRouter)
 Router.use('/signup', signupRouter)
@@ -37,6 +39,8 @@ Router.route('/logined').get((req, res) => {
 Router.route('/logout').get((req, res) => {
     req.session.destroy(err => {
         if (err) return res.json({message: err, status: "fail"})
+        const user_id = req.session?.passport?.user?.user_id
+        if (user_id) UserService.unActived(user_id)
         res.json({message: 'đăng xuất thành công', status: 'success'})
     })
 })
