@@ -101,8 +101,8 @@ io.on("connection", (socket) => {
   });
 });
 
-httpsServer.listen(process.env.PORT || 8080, () => {
-  console.log(`Server running on port ${process.env.PORT || 8080}`);
+httpsServer.listen(443 || 8080, () => {
+  console.log(`Server running on port ${443 || 8080}`);
 });
 
 module.exports = app;
