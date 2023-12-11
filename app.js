@@ -1,4 +1,4 @@
-const https = require("https");
+const http = require("http");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
@@ -62,7 +62,7 @@ app.use((req, res) => {
 // });
 
 // Tạo máy chủ HTTPS va socket.io
-const httpsServer = https.createServer(credentials, app);
+const httpsServer = http.createServer(credentials, app);
 const io = new Server(httpsServer, {
   cors: {
     origin: true,
