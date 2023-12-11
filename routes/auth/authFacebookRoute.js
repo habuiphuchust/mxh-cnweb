@@ -9,7 +9,7 @@ const UserService = require('../../services/UserService')
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "/auth/facebook/callback",
+    callbackURL: "https://www.habuiphuc.id.vn/auth/facebook/callback",
     scope: ["user_hometown", "user_birthday", "user_gender", "public_profile"]
 },
     function (accessToken, refreshToken, profile, cb) {
