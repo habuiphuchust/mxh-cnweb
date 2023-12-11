@@ -102,6 +102,7 @@ io.on("connection", (socket) => {
 });
 
 httpsServer.listen(process.env.PORT || 8080, () => {
+  console.log(httpsServer.address())
   console.log(`Server running on port ${process.env.PORT || 8080}`);
 });
 
