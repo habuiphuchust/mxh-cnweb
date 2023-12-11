@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
+const MongoStore = require('connect-mongo');
 const path = require('path')
 const Router = require("./routes/index.js");
 const cors = require("cors");
@@ -43,10 +44,14 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    sameSite: 'None',
-    secure: true,
+    sameSite: 'strict',
+    secure: false,
     maxAge: 604800000
-  }
+  },
+  store: MongoStore.create({
+    client: mongoose.connection.getClient()
+  })
+
 });
 app.use(sessionMiddleware);
 
@@ -83,13 +88,13 @@ io.on("connection", (socket) => {
   socket.on("notify", (data) => {
     socket.to(data?.user_two_id).emit("notify", data.message);
   });
-  socket.on('entering', ({sender, receiver}) => {
-    socket.to(receiver).emit('entering', {sender, receiver})
+  socket.on('entering', ({ sender, receiver }) => {
+    socket.to(receiver).emit('entering', { sender, receiver })
   })
   socket.on('onmessage', (message) => {
     socket.to(message?.receiver).emit('onmessage', message)
   })
-  socket.on('newmessage', ({receiver, message}) => {
+  socket.on('newmessage', ({ receiver, message }) => {
     socket.to(receiver).emit('newmessage', message)
   })
   socket.on("disconnect", () => {
