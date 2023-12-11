@@ -20,6 +20,7 @@ const getMessagers = async (req, res) => {
       const messagers = new Map()
       for (let message of messages) {
         let user
+        if (!message.sender) continue;
         if (message.sender.toString() == user_id) {
           if (!messagers.has(message.receiver.toString())) {
             user = await User.findById(message.receiver, {_id: 1, user_fullname: 1, user_activated: 1, user_picture: 1})
@@ -44,7 +45,7 @@ const sendMessage = async (req, res) => {
   try {
     const { sender, receiver, text } = req.body;
     let user_id = req.session?.passport?.user?.user_id
-    if (user_id !== sender) {
+    if (user_id !== sender || !user_id) {
       res.json({message: "chưa đăng nhập hoặc sai người gửi", status: "fail"})
       return;
     }
