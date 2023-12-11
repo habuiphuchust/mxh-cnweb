@@ -175,6 +175,6 @@ exports.searchUsers = async (req, res) => {
     }
     res.json({message: "ít nhất 2 kí tự", status: 'fail'})
   } catch (error) {
-    res.status(500).json({ message: err.message, status: "fail" });
+    res.status(500).json({ message: error.message, status: "fail" });
   }
 }

@@ -2,6 +2,7 @@ const https = require("https");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
+const path = require('path')
 const Router = require("./routes/index.js");
 const cors = require("cors");
 const { Server } = require("socket.io");
@@ -52,6 +53,10 @@ app.use(sessionMiddleware);
 // router
 app.use("/", Router);
 
+// const index = path.join(__dirname, 'public', 'index.html')
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 // app.listen(process.env.PORT || 8080, () => {
 //   console.log(`Server is running on port ${process.env.PORT || 8080}`);
 // });
@@ -66,7 +71,7 @@ const io = new Server(httpsServer, {
 });
 io.engine.use(sessionMiddleware);
 io.on("connection", (socket) => {
-  console.log('new user')
+  // console.log('new user')
   let user_id = null;
   socket.on("active", (_id) => {
     user_id = _id;

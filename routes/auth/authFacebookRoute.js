@@ -34,7 +34,7 @@ authFacebookRoute.route('/callback').get(passport.authenticate('facebook', { fai
         // Successful authentication, redirect home.
         // console.log(req.session)
         UserService.setActived(req.session?.passport?.user?.user_id)
-        res.redirect('https://habuiphuc.id.vn:8080');
+        res.redirect('/');
     })
 
 module.exports = authFacebookRoute
