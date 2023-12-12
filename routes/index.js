@@ -10,7 +10,7 @@ const {signupRouter} = require('./Signup');
 const ImageRoutes = require('./ImageRoutes')
 const messageRoutes = require('./MessageRoutes')
 const UserService = require("../services/UserService.js");
-
+const commentRoutes  = require("./CommentRoutes")
 //
 const Router = express.Router()
 const apiRouter = express.Router()
@@ -23,6 +23,7 @@ apiRouter.use("/followings", followingRouter);
 apiRouter.use('/images', ImageRoutes);
 apiRouter.use('/likes', likeRouters);
 apiRouter.use('/messages', messageRoutes)
+apiRouter.use('/comment', commentRoutes)
 
 Router.use('/api', apiRouter)
 Router.use('/signup', signupRouter)
