@@ -28,6 +28,6 @@ const postSchema = new Schema({
         type: Number,
         default: 0
     },
-    shares: String // được chia sẻ từ bài nào hay ko
+    share_from: String // được chia sẻ từ bài nào hay ko
 });
 module.exports = mongoose.model("post", postSchema);

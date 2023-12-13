@@ -1,5 +1,4 @@
 const Message = require('../models/Message');
-const Image = require('../models/Image')
 const User = require('../models/User')
 
 

@@ -23,7 +23,7 @@ apiRouter.use("/followings", followingRouter);
 apiRouter.use('/images', ImageRoutes);
 apiRouter.use('/likes', likeRouters);
 apiRouter.use('/messages', messageRoutes)
-apiRouter.use('/comment', commentRoutes)
+apiRouter.use('/comments', commentRoutes)
 
 Router.use('/api', apiRouter)
 Router.use('/signup', signupRouter)

@@ -1,90 +1,69 @@
-const LikeModal = require('../models/Like')
-const PostModal = require('../models/Post')
-const UserModal = require('../models/User')
-const CommentModal = require('../models/Comment')
+const Comment = require('../models/Comment')
+const Post = require('../models/Post')
+const User = require('../models/User')
 
-exports.createReact = async (req, res) => {
+const addComment = async (req, res) => {
     try {
-        const user_id = req.session?.passport?.user?.user_id
+        let user_id = req.session?.passport?.user?.user_id
         if (!user_id) {
-            res.json({message: "chưa đăng nhập", status: "fail"})
+            res.json({ message: "chưa đăng nhập", status: "fail" })
             return;
         }
-        const react = req.body
-        const old_like = await LikeModal.findOne({post_id: react.post_id, user_id})
-        if (old_like) {
-            res.json({message: 'đã like or unlike', status: 'fail'})
+        const { post_id, text } = req.body
+        const post = await Post.findById(post_id)
+        if (!post) {
+            res.json({ message: "Không tìm được bài viết", status: "fail" })
             return;
         }
-        const new_like = await LikeModal.create({...react, user_id});
-        let {likes, unlikes} = await PostModal.findById(react.post_id, {likes: 1, unlikes: 1})
-        if (react.type === 'like') {
-            likes++
-        } else if (react.type === 'unlike') {
-            unlikes++
+        let user = await User.findById(user_id, {_id: 1, user_fullname: 1, user_activated: 1, user_picture: 1})
+        const comment = new Comment({ post_id, user_id, text });
+        await comment.save();
+        await Post.findByIdAndUpdate(post_id, { comments: post.comments + 1 })
+        res.status(200).json({ data: {user, comment}, status: 'success' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message, status: 'fail' });
+    }
+};
+
+const deleteComment = async (req, res) => {
+    try {
+        let user_id = req.session?.passport?.user?.user_id
+        const comment = await Comment.findById(req.params.id)
+        if (!comment) {
+            res.json({ message: "không tìm được bình luận", status: "fail" })
+            return;
         }
-        await PostModal.findByIdAndUpdate(react.post_id, {likes, unlikes})
-        res.json({ data: new_like , status: "success" });
-      } catch (err) {
-        console.log(err)
-        res.status(500).json({ message: err.message, status: "fail" });
-      }
+        const post = await Post.findById(comment.post_id)
+        if (user_id != comment.user_id && user_id != post.user_id) {
+            res.json({ message: "không có quyền xóa", status: "fail" })
+            return;
+        }
+        const result = await Comment.findByIdAndDelete(req.params.id);
+        await Post.findByIdAndUpdate(comment.post_id, { comments: post.comments - 1 })
+        res.status(200).json({ data: result, status: 'success' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message, status: 'fail' });
+    }
 }
 
-exports.deleteReact = async (req, res) => {
-    try {
-        const user_id = req.session?.passport?.user?.user_id
-        if (!user_id) {
-            res.json({message: "chưa đăng nhập", status: "fail"})
-            return;
-        }
-        const react = req.body
-        const old_like = await LikeModal.findOneAndDelete({post_id: react.post_id, user_id})
-        if (!old_like) {
-            res.json({message: 'chưa like or unlike', status: 'fail'})
-            return;
-        }
-        let {likes, unlikes} = await PostModal.findById(react.post_id, {likes: 1, unlikes: 1})
-        if (old_like.type === 'like') {
-            likes--
-        } else if (old_like.type === 'unlike') {
-            unlikes--
-        }
-        await PostModal.findByIdAndUpdate(react.post_id, {likes, unlikes})
-        res.json({ data: old_like , status: "success" });
-      } catch (err) {
-        console.log(err)
-        res.status(500).json({ message: err.message, status: "fail" });
-      }
-}
 
-exports.getReact = async (req, res) => {
+const getComments = async (req, res) => {
     try {
-        const user_id = req.session?.passport?.user?.user_id
-        if (!user_id) {
-            res.json({message: "chưa đăng nhập", status: "fail"})
-            return;
-        }
-        const react = req.body
-        const old_react = await LikeModal.findOne({post_id: react.post_id, user_id})
-        res.json({ data: old_react , status: "success" });
-      } catch (err) {
-        console.log(err)
-        res.status(500).json({ message: err.message, status: "fail" });
-      }
-}
+        const post_id = req.params.id;
+        const comments = await Comment.find({ post_id }).sort({ time: 1 });
+        result = []
+        if (comments)
+            for (let comment of comments) {
+                let user = await User.findById(comment.user_id, {_id: 1, user_fullname: 1, user_activated: 1, user_picture: 1})
+                result.push({comment, user})
+            }
+        res.status(200).json({ data: result, status: 'success' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message, status: 'fail' });
+    }
+};
 
-exports.getUsersLiked = async (req, res) => {
-    try {
-        let reacts = await LikeModal.find({post_id: req.params.id})
-        let result = []
-        for (let react of reacts) {
-            let user = await UserModal.findById(react.user_id, {_id: 1, user_fullname: 1, user_picture: 1, user_activated: 1})
-            result.push({...react._doc, user})
-        }
-        res.json({ data: result , status: "success" });
-      } catch (err) {
-        console.log(err)
-        res.status(500).json({ message: err.message, status: "fail" });
-      }
-}
+module.exports = { addComment, deleteComment, getComments };

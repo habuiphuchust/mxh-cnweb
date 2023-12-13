@@ -1,4 +1,4 @@
-const http = require("http");
+const https = require("https");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
@@ -44,8 +44,8 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    sameSite: 'strict',
-    secure: false,
+    sameSite: 'none',
+    secure: true,
     maxAge: 604800000
   },
   store: MongoStore.create({
@@ -59,15 +59,15 @@ app.use(sessionMiddleware);
 app.use("/", Router);
 
 // const index = path.join(__dirname, 'public', 'index.html')
-app.use((req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+// app.use((req, res) => {
+//   res.sendFile(path.join(__dirname, 'public', 'index.html'))
+// })
 // app.listen(process.env.PORT || 8080, () => {
 //   console.log(`Server is running on port ${process.env.PORT || 8080}`);
 // });
 
 // Tạo máy chủ HTTPS va socket.io
-const httpsServer = http.createServer(credentials, app);
+const httpsServer = https.createServer(credentials, app);
 const io = new Server(httpsServer, {
   cors: {
     origin: true,

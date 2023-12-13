@@ -4,6 +4,7 @@ const FriendService = require('../services/FriendService')
 const UserService = require('../services/UserService')
 const UserModal = require('../models/User')
 const LikeModal = require('../models/Like')
+const Comment = require('../models/Comment')
 
 
 exports.getAllPosts = async (req, res) => {
@@ -60,6 +61,7 @@ exports.createPost = async (req, res) => {
   }
   try {
     const text = req.body?.status
+    const share_from = req.body.share_from
     const photos = []
     const user_id = req.session.passport.user.user_id
     for (const image of req.files) {
@@ -141,6 +143,7 @@ exports.deletePost = async (req, res) => {
       await Image.findByIdAndDelete(image);
     }
     await LikeModal.deleteMany({post_id: req.params.id})
+    await Comment.deleteMany({post_id:req.params.id})
     const result = await postService.deletePost(req.params.id)
 
     res.json({ message: result, status: "success" });
