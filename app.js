@@ -1,4 +1,4 @@
-const https = require("https");
+const https = require("http");
 const fs = require("fs");
 const express = require("express");
 const session = require("express-session");
@@ -44,8 +44,8 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: true,
   cookie: {
-    sameSite: 'none',
-    secure: true,
+    sameSite: 'strict',
+    secure: false,
     maxAge: 604800000
   },
   store: MongoStore.create({
@@ -58,10 +58,9 @@ app.use(sessionMiddleware);
 // router
 app.use("/", Router);
 
-// const index = path.join(__dirname, 'public', 'index.html')
-// app.use((req, res) => {
-//   res.sendFile(path.join(__dirname, 'public', 'index.html'))
-// })
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'))
+})
 // app.listen(process.env.PORT || 8080, () => {
 //   console.log(`Server is running on port ${process.env.PORT || 8080}`);
 // });

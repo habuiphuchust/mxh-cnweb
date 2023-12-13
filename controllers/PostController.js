@@ -5,6 +5,7 @@ const UserService = require('../services/UserService')
 const UserModal = require('../models/User')
 const LikeModal = require('../models/Like')
 const Comment = require('../models/Comment')
+const Post = require('../models/Post')
 
 
 exports.getAllPosts = async (req, res) => {
@@ -72,8 +73,11 @@ exports.createPost = async (req, res) => {
       })
       photos.push(newImage?._id)
     }
-    const newPost = await postService.createPost({user_id, text, photos})
-
+    if (share_from) {
+      let sharedPost = await Post.findById(share_from)
+      await Post.findByIdAndUpdate(share_from, {shares: sharedPost.shares + 1})
+    }
+    const newPost = await postService.createPost({user_id, text, photos, share_from})
     res.json({ data: newPost, status: "success" });
   } catch (err) {
     console.log(err)

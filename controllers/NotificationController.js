@@ -2,7 +2,13 @@ const NotificationService = require("../services/NotificationService")
 
 exports.createNotification = async (req, res) => {
   try {
-    const Notification = await NotificationService.createNotification(req.body);
+    let user_id = req.session?.passport?.user?.user_id
+    if (!user_id) {
+      res.json({message: "chưa đăng nhập", status: "fail"})
+      return;
+    }
+    const {to_user_id, action, url, message} = req.body
+    const Notification = await NotificationService.createNotification({to_user_id, action, url, message, from_user_id: user_id});
     res.json({ data: Notification, status: "success" });
   } catch (err) {
     console.log(err)

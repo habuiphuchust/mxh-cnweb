@@ -1,6 +1,8 @@
 const Comment = require('../models/Comment')
 const Post = require('../models/Post')
 const User = require('../models/User')
+const NotificationService = require('../services/NotificationService')
+
 
 const addComment = async (req, res) => {
     try {
@@ -18,7 +20,13 @@ const addComment = async (req, res) => {
         let user = await User.findById(user_id, {_id: 1, user_fullname: 1, user_activated: 1, user_picture: 1})
         const comment = new Comment({ post_id, user_id, text });
         await comment.save();
-        await Post.findByIdAndUpdate(post_id, { comments: post.comments + 1 })
+        const poster = await Post.findByIdAndUpdate(post_id, { comments: post.comments + 1 })
+        if (poster && poster.user_id != user_id) {
+            const message = `${req.session.passport.user.user_fullname} đã bình luận bài viết của bạn`
+            const notify = { to_user_id: poster.user_id, from_user_id: user_id, action: 'comment', url: '/post?id=' + poster._id, message }
+            await NotificationService.createNotification(notify)
+
+        }
         res.status(200).json({ data: {user, comment}, status: 'success' });
     } catch (error) {
         console.error(error);
@@ -40,7 +48,12 @@ const deleteComment = async (req, res) => {
             return;
         }
         const result = await Comment.findByIdAndDelete(req.params.id);
-        await Post.findByIdAndUpdate(comment.post_id, { comments: post.comments - 1 })
+        const poster = await Post.findByIdAndUpdate(comment.post_id, { comments: post.comments - 1 })
+        if (poster) {
+            const notify = { to_user_id: poster.user_id, from_user_id: user_id, action: 'comment', url: '/post?id=' + poster._id }
+            await NotificationService.deleteNotification(notify)
+
+        }
         res.status(200).json({ data: result, status: 'success' });
     } catch (error) {
         console.error(error);
